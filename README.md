@@ -1,69 +1,69 @@
-# Welcome to your Lovable project
 
-## Project info
+# Dividend App
 
-**URL**: https://lovable.dev/projects/2742a61b-aebe-4ba8-be57-9911800ff969
+A modern React application for tracking dividend events, visualizing payouts, and monitoring cash utilization over time.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **Add Dividend Events**: Easily add new dividend events with ticker symbol, dates, and yield information.
+- **Track Receipt Status**: Mark dividends as received to maintain accurate records.
+- **Visualize Data**: View dividend payouts and cash utilization through interactive charts.
+- **Responsive Design**: Works seamlessly on desktop and mobile devices.
 
-**Use Lovable**
+## Project Structure
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2742a61b-aebe-4ba8-be57-9911800ff969) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+dividend-app/
+├── src/
+│   ├── components/
+│   │   ├── BarChartComponent.tsx    # Bar chart for cash utilization
+│   │   ├── EventModal.tsx           # Modal form for adding dividend events
+│   │   └── LineChartComponent.tsx   # Line chart for dividend payouts
+│   ├── pages/
+│   │   └── Index.tsx                # Main Calendar page
+│   ├── types/
+│   │   └── dividend.ts              # TypeScript interfaces
+│   ├── App.tsx                      # Main application component
+│   └── index.css                    # Global styles
 ```
 
-**Edit a file directly in GitHub**
+## Technologies Used
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **React**: Front-end library for building user interfaces
+- **TypeScript**: Static typing for better code quality
+- **Tailwind CSS**: Utility-first CSS framework
+- **Recharts**: Composable charting library
+- **React Hook Form**: Form handling with validation
+- **date-fns**: Date utility library
+- **shadcn/ui**: UI component library
 
-**Use GitHub Codespaces**
+## Getting Started
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start the development server: `npm run dev`
+4. Open your browser to: `http://localhost:8080`
 
-## What technologies are used for this project?
+## Usage
 
-This project is built with .
+1. Click the "Add Dividend Event" button to open the form modal
+2. Fill in the required fields (Ticker Symbol and Ex-Dividend Date)
+3. Optionally add Pay Date, Dividend Yield, and check "Mark as Received" if applicable
+4. Submit the form to add the event
+5. View the event in the list and see updated charts
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Accessibility Features
 
-## How can I deploy this project?
+- ARIA labels on interactive elements
+- Keyboard navigation support
+- Form validation with error messages
+- Color contrast compliance
+- Focus management in modal dialogs
 
-Simply open [Lovable](https://lovable.dev/projects/2742a61b-aebe-4ba8-be57-9911800ff969) and click on Share -> Publish.
+## Future Enhancements
 
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- Data persistence with local storage or backend integration
+- Calendar view for visualizing dividend dates
+- Filtering and sorting options for dividend events
+- Portfolio performance metrics
+- Export/import functionality for data backup
