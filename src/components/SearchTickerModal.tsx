@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 import { SecuritySearchResult, StockData } from "@/types/dividend";
 import { searchSecurities, getStockData } from "@/services/intrinioService";
 import { useIsMobile } from "@/hooks/use-mobile";

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { format } from "date-fns";
 import { Plus } from "lucide-react";
@@ -9,7 +8,7 @@ import BarChartComponent from "@/components/BarChartComponent";
 import { DividendEvent } from "@/types/dividend";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 
 const CalendarPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
