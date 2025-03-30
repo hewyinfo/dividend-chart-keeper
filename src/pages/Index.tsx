@@ -8,14 +8,21 @@ import LineChartComponent from "@/components/LineChartComponent";
 import BarChartComponent from "@/components/BarChartComponent";
 import { DividendEvent } from "@/types/dividend";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/components/ui/toast";
 
 const CalendarPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dividendEvents, setDividendEvents] = useState<DividendEvent[]>([]);
+  const { toast } = useToast();
 
   const handleAddEvent = (event: DividendEvent) => {
     setDividendEvents([...dividendEvents, event]);
     setIsModalOpen(false);
+    toast({
+      title: "Event Added",
+      description: `Added ${event.ticker} dividend event`,
+    });
   };
 
   return (
@@ -47,21 +54,31 @@ const CalendarPage = () => {
                       <span className="text-sm text-gray-500 ml-2">
                         Ex-Date: {format(new Date(event.exDate), "MMM dd, yyyy")}
                       </span>
-                    </div>
-                    <div className="flex items-center">
-                      {event.yield && (
-                        <span className="text-sm text-gray-700 mr-3">
-                          Yield: {event.yield}%
+                      {event.amount && (
+                        <span className="text-sm text-gray-500 ml-2">
+                          ${event.amount.toFixed(4)}
                         </span>
                       )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {event.yield && (
+                        <span className="text-sm text-gray-700">
+                          Yield: {event.yield.toFixed(2)}%
+                        </span>
+                      )}
+                      {event.status && (
+                        <Badge variant={event.status === "Confirmed" ? "default" : "outline"}>
+                          {event.status}
+                        </Badge>
+                      )}
                       {event.received ? (
-                        <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
+                        <Badge variant="success" className="bg-green-100 text-green-800 hover:bg-green-200">
                           Received
-                        </span>
+                        </Badge>
                       ) : (
-                        <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">
+                        <Badge variant="warning" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
                           Pending
-                        </span>
+                        </Badge>
                       )}
                     </div>
                   </div>
