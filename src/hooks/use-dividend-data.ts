@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { DividendEvent, DividendFilters } from '@/types/dividend';
 import { useToast } from '@/hooks/use-toast';
@@ -7,7 +6,8 @@ import {
   addMockDividendEvent, 
   updateMockDividendEvent, 
   deleteMockDividendEvent,
-  exportMockToCsv
+  exportMockToCsv,
+  addMockCashEvent 
 } from '@/services/mockDataService';
 
 export function useDividendData() {
@@ -63,6 +63,28 @@ export function useDividendData() {
       toast({
         title: 'Error',
         description: 'Failed to add dividend event. Please try again.',
+        variant: 'destructive',
+      });
+      return null;
+    }
+  }, [toast]);
+
+  const addCashEvent = useCallback(async (amount: number, date: Date, notes: string) => {
+    try {
+      // Use the mock service instead of Supabase for now
+      const newEvent = await addMockCashEvent(amount, date, notes);
+      
+      if (newEvent) {
+        setDividendEvents(prev => [...prev, newEvent]);
+        return newEvent;
+      }
+      
+      throw new Error('Failed to add cash event');
+    } catch (err) {
+      console.error('Failed to add cash event:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to add cash event. Please try again.',
         variant: 'destructive',
       });
       return null;
@@ -163,5 +185,6 @@ export function useDividendData() {
     reloadEvents: loadDividendEvents,
     updateFilters,
     exportData,
+    addCashEvent,
   };
 }

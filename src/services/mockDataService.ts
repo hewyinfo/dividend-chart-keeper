@@ -45,6 +45,31 @@ function generateRandomDividendEvents(count: number): DividendEvent[] {
     });
   }
   
+  // Add a couple of cash events
+  events.push({
+    id: `cash-1`,
+    ticker: "CASH",
+    exDate: format(subMonths(today, 2), "yyyy-MM-dd"),
+    received: true,
+    amount: 1000,
+    status: "Confirmed",
+    price: 1000,
+    notes: "Initial Roth Contribution",
+    created_at: new Date().toISOString(),
+  });
+  
+  events.push({
+    id: `cash-2`,
+    ticker: "CASH",
+    exDate: format(subMonths(today, 1), "yyyy-MM-dd"),
+    received: true,
+    amount: 500,
+    status: "Confirmed",
+    price: 500,
+    notes: "Reinvested dividends",
+    created_at: new Date().toISOString(),
+  });
+  
   return events;
 }
 
@@ -61,6 +86,23 @@ export async function addMockDividendEvent(event: DividendEvent): Promise<Divide
   return {
     ...event,
     id: `id-${Date.now()}`,
+    created_at: new Date().toISOString(),
+  };
+}
+
+export async function addMockCashEvent(amount: number, date: Date, notes: string): Promise<DividendEvent> {
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  return {
+    id: `cash-${Date.now()}`,
+    ticker: "CASH",
+    exDate: format(date, "yyyy-MM-dd"),
+    received: true,
+    amount: amount,
+    status: "Confirmed",
+    price: amount,
+    notes: notes,
     created_at: new Date().toISOString(),
   };
 }

@@ -1,20 +1,22 @@
 
 import React, { useState } from "react";
-import { Plus, Download, Search } from "lucide-react";
+import { Plus, Download, Search, CircleDollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useDividendData } from "@/hooks/use-dividend-data";
 import DividendChart from "@/components/dividend/DividendChart";
 import DividendCalendar from "@/components/dividend/DividendCalendar";
 import EventModal from "@/components/EventModal";
 import { DividendEvent } from "@/types/dividend";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import AddCashModal from "@/components/dividend/AddCashModal";
 
 const DividendDashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [isCashModalOpen, setIsCashModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
   
@@ -26,12 +28,24 @@ const DividendDashboard = () => {
     addEvent,
     updateFilters,
     exportData,
+    addCashEvent,
   } = useDividendData();
 
   const handleAddEvent = async (event: DividendEvent) => {
     const result = await addEvent(event);
     if (result) {
-      setIsModalOpen(false);
+      setIsEventModalOpen(false);
+    }
+  };
+
+  const handleAddCash = async (amount: number, date: Date, notes: string) => {
+    const result = await addCashEvent(amount, date, notes);
+    if (result) {
+      setIsCashModalOpen(false);
+      toast({
+        title: "Success",
+        description: `Added ${amount.toFixed(2)} to cash utilized`,
+      });
     }
   };
 
@@ -88,7 +102,10 @@ const DividendDashboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <header className="mb-8">
+      <header className="mb-8 flex flex-col items-center">
+        <div className="absolute top-4 right-4">
+          <ThemeToggle />
+        </div>
         <h1 className="text-3xl font-bold mb-2 text-center">Dividend Tracker</h1>
         <p className="text-muted-foreground text-center">
           Track and visualize your dividend investments
@@ -120,7 +137,17 @@ const DividendDashboard = () => {
           </Button>
           
           <Button
-            onClick={() => setIsModalOpen(true)}
+            variant="outline"
+            size="sm"
+            onClick={() => setIsCashModalOpen(true)}
+            className="gap-2"
+          >
+            <CircleDollarSign className="h-4 w-4" />
+            <span>Add Cash</span>
+          </Button>
+          
+          <Button
+            onClick={() => setIsEventModalOpen(true)}
             className="gap-2"
           >
             <Plus className="h-4 w-4" />
@@ -135,9 +162,9 @@ const DividendDashboard = () => {
           <Skeleton className="h-[500px] w-full rounded-xl" />
         </div>
       ) : error ? (
-        <Card className="my-4 bg-red-50 border-red-200">
+        <Card className="my-4 bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800">
           <CardContent className="p-6">
-            <p className="text-red-700">{error}</p>
+            <p className="text-red-700 dark:text-red-400">{error}</p>
             <Button 
               variant="outline" 
               className="mt-2"
@@ -148,28 +175,31 @@ const DividendDashboard = () => {
           </CardContent>
         </Card>
       ) : (
-        <Tabs defaultValue="chart">
-          <div className="flex justify-center mb-4">
-            <TabsList>
-              <TabsTrigger value="chart">Chart View</TabsTrigger>
-              <TabsTrigger value="calendar">Calendar View</TabsTrigger>
-            </TabsList>
+        <div className="space-y-8">
+          {/* Chart View */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Performance Chart</h2>
+            <DividendChart dividendEvents={filteredEvents} />
           </div>
           
-          <TabsContent value="chart" className="mt-0">
-            <DividendChart dividendEvents={filteredEvents} />
-          </TabsContent>
-          
-          <TabsContent value="calendar" className="mt-6">
+          {/* Calendar View */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Dividend Calendar</h2>
             <DividendCalendar dividendEvents={filteredEvents} />
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       )}
 
       <EventModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isEventModalOpen} 
+        onClose={() => setIsEventModalOpen(false)}
         onSubmit={handleAddEvent}
+      />
+      
+      <AddCashModal
+        isOpen={isCashModalOpen}
+        onClose={() => setIsCashModalOpen(false)}
+        onSubmit={handleAddCash}
       />
     </div>
   );
