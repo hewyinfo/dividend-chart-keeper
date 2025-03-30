@@ -1,5 +1,6 @@
 
 export interface DividendEvent {
+  id?: string;
   ticker: string;
   exDate: string;
   payDate?: string;
@@ -10,11 +11,23 @@ export interface DividendEvent {
   notes?: string;
   yieldOnCost?: number;
   price?: number;
+  created_at?: string;
 }
 
 export interface ChartDataPoint {
   date: string;
   value: number;
+  cashUtilized?: number;
+  cumulativePaid?: number;
+  cumulativeProjected?: number;
+  events?: DividendEvent[];
+}
+
+export interface SecuritySearchResult {
+  ticker: string;
+  name: string;
+  securityType?: string;
+  exchange?: string;
 }
 
 export interface StockData {
@@ -27,9 +40,10 @@ export interface StockData {
   paymentDate: string;
 }
 
-export interface SecuritySearchResult {
-  ticker: string;
-  name: string;
-  securityType?: string;
-  exchange?: string;
+export interface DividendFilters {
+  showCashUtilized: boolean;
+  showDividendsPaid: boolean;
+  showProjectedDividends: boolean;
+  ticker?: string;
+  timeScale: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
 }
