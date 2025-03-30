@@ -14,9 +14,7 @@ export function useStockSearch() {
   
   useEffect(() => {
     return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
     };
   }, []);
 
@@ -43,14 +41,10 @@ export function useStockSearch() {
     const value = e.target.value;
     setQuery(value);
     
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
     
     if (value.length >= 2) {
-      searchTimeoutRef.current = setTimeout(() => {
-        handleSearch({ query: value });
-      }, 500);
+      searchTimeoutRef.current = setTimeout(() => handleSearch({ query: value }), 500);
     } else {
       setSearchResults([]);
     }
@@ -83,9 +77,7 @@ export function useStockSearch() {
   };
 
   const handleRefresh = () => {
-    if (selectedStock) {
-      handleSelectTicker(selectedStock.ticker);
-    }
+    if (selectedStock) handleSelectTicker(selectedStock.ticker);
   };
 
   return {

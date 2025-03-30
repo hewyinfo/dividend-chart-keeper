@@ -45,23 +45,9 @@ const SearchTickerModal = ({ isOpen, onClose, onSelectStock }: SearchTickerModal
     handleUseData
   };
 
-  if (isMobile) {
-    return (
-      <MobileSearchModal 
-        isOpen={isOpen} 
-        onClose={onClose} 
-        contentProps={contentProps} 
-      />
-    );
-  }
-
-  return (
-    <DesktopSearchModal 
-      isOpen={isOpen} 
-      onClose={onClose} 
-      contentProps={contentProps} 
-    />
-  );
+  return isMobile 
+    ? <MobileSearchModal isOpen={isOpen} onClose={onClose} contentProps={contentProps} />
+    : <DesktopSearchModal isOpen={isOpen} onClose={onClose} contentProps={contentProps} />;
 };
 
 export default SearchTickerModal;
