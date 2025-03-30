@@ -5,22 +5,10 @@ import { useToast } from '@/hooks/use-toast';
 import { 
   getMockDividendEvents, 
   addMockDividendEvent, 
-  updateMockDividendEvent,
+  updateMockDividendEvent, 
   deleteMockDividendEvent,
-  exportMockToCsv 
+  exportMockToCsv
 } from '@/services/mockDataService';
-
-// Use environment variables to determine if we should use Supabase
-const USE_SUPABASE = false; // Change this when Supabase is set up
-
-// Conditionally import Supabase functions
-let supabaseService: any = null;
-if (USE_SUPABASE) {
-  // This will be loaded dynamically when Supabase is set up
-  import('@/services/supabaseService').then(module => {
-    supabaseService = module;
-  });
-}
 
 export function useDividendData() {
   const [dividendEvents, setDividendEvents] = useState<DividendEvent[]>([]);
@@ -39,15 +27,8 @@ export function useDividendData() {
     setError(null);
     
     try {
-      let events: DividendEvent[];
-      
-      if (USE_SUPABASE && supabaseService) {
-        events = await supabaseService.fetchDividendEvents();
-      } else {
-        // Use mock data during development
-        events = await getMockDividendEvents();
-      }
-      
+      // Use the mock service instead of Supabase for now
+      const events = await getMockDividendEvents();
       setDividendEvents(events);
     } catch (err) {
       console.error('Failed to load dividend events:', err);
@@ -64,17 +45,11 @@ export function useDividendData() {
 
   const addEvent = useCallback(async (event: DividendEvent) => {
     try {
-      let newEvent: DividendEvent | null;
-      
-      if (USE_SUPABASE && supabaseService) {
-        newEvent = await supabaseService.addDividendEvent(event);
-      } else {
-        // Use mock data during development
-        newEvent = await addMockDividendEvent(event);
-      }
+      // Use the mock service instead of Supabase for now
+      const newEvent = await addMockDividendEvent(event);
       
       if (newEvent) {
-        setDividendEvents(prev => [...prev, newEvent!]);
+        setDividendEvents(prev => [...prev, newEvent]);
         toast({
           title: 'Success',
           description: `Added ${event.ticker} dividend event`,
@@ -105,18 +80,12 @@ export function useDividendData() {
     }
     
     try {
-      let updatedEvent: DividendEvent | null;
-      
-      if (USE_SUPABASE && supabaseService) {
-        updatedEvent = await supabaseService.updateDividendEvent(event);
-      } else {
-        // Use mock data during development
-        updatedEvent = await updateMockDividendEvent(event);
-      }
+      // Use the mock service instead of Supabase for now
+      const updatedEvent = await updateMockDividendEvent(event);
       
       if (updatedEvent) {
         setDividendEvents(prev => 
-          prev.map(e => e.id === updatedEvent!.id ? updatedEvent! : e)
+          prev.map(e => e.id === updatedEvent.id ? updatedEvent : e)
         );
         toast({
           title: 'Success',
@@ -139,14 +108,8 @@ export function useDividendData() {
 
   const deleteEvent = useCallback(async (id: string) => {
     try {
-      let success: boolean;
-      
-      if (USE_SUPABASE && supabaseService) {
-        success = await supabaseService.deleteDividendEvent(id);
-      } else {
-        // Use mock data during development
-        success = await deleteMockDividendEvent(id);
-      }
+      // Use the mock service instead of Supabase for now
+      const success = await deleteMockDividendEvent(id);
       
       if (success) {
         setDividendEvents(prev => prev.filter(e => e.id !== id));
@@ -173,12 +136,14 @@ export function useDividendData() {
     setFilters(prev => ({ ...prev, ...newFilters }));
   }, []);
 
-  // Export function that uses the correct service
   const exportData = useCallback(async () => {
-    if (USE_SUPABASE && supabaseService) {
-      return await supabaseService.exportToCsv();
-    } else {
-      return await exportMockToCsv();
+    try {
+      // Use the mock service instead of Supabase for now
+      const csvData = await exportMockToCsv();
+      return csvData;
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      return '';
     }
   }, []);
 
