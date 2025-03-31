@@ -38,7 +38,7 @@ const DatePickerFields: React.FC<DatePickerFieldsProps> = ({ form }) => {
                     ) : (
                       <span>Pick a date</span>
                     )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-70" />
                   </Button>
                 </FormControl>
               </PopoverTrigger>
@@ -78,7 +78,7 @@ const DatePickerFields: React.FC<DatePickerFieldsProps> = ({ form }) => {
                     ) : (
                       <span>Pick a date</span>
                     )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-70" />
                   </Button>
                 </FormControl>
               </PopoverTrigger>

@@ -37,39 +37,59 @@
     --ring: 234 88% 53%;
 
     --radius: 0.75rem;
+
+    /* Theme color variables */
+    --blue-primary: 234 88% 53%;
+    --blue-accent: 234 88% 83%;
+    
+    --green-primary: 142 70% 45%;
+    --green-accent: 142 70% 85%;
+    
+    --purple-primary: 280 80% 50%;
+    --purple-accent: 280 80% 85%;
   }
 
   .dark {
     --background: 240 10% 4%; /* black #090809 */
     --foreground: 0 0% 100%; /* white #FFFFFF */
 
-    --card: 240 10% 4%;
-    --card-foreground: 0 0% 100%;
+    --card: 240 10% 6%; /* slightly lighter than background */
+    --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 240 10% 8%; /* slightly lighter than card */
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 234 88% 53%; /* blue #1831F2 */
+    --primary: 234 88% 65%; /* Brighter blue for dark mode */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted-foreground: 240 5% 74.9%; /* Increased brightness for better readability */
 
-    --accent: 240 3.7% 15.9%;
+    --accent: 240 3.7% 20%; /* Slightly brighter for dark mode */
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 72.2% 50.6%; /* Brighter red for dark mode */
     --destructive-foreground: 0 0% 98%;
 
     --success: 142 70% 60%; /* green #55DD6E */
     --success-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 240 3.7% 25%; /* Increased brightness for better visibility */
+    --input: 240 3.7% 25%;
     --ring: 234 88% 70%;
+
+    /* Theme color variants for dark mode */
+    --blue-primary: 234 88% 70%;
+    --blue-accent: 234 88% 30%;
+    
+    --green-primary: 142 70% 60%;
+    --green-accent: 142 70% 25%;
+    
+    --purple-primary: 280 80% 65%;
+    --purple-accent: 280 80% 30%;
   }
 
   * {
@@ -83,7 +103,7 @@
 
 /* Chart custom styles */
 .chart-container {
-  @apply p-4 rounded-lg border border-gray-200 shadow-sm;
+  @apply p-4 rounded-lg border border-gray-200 shadow-sm dark:border-gray-700 dark:shadow-gray-800;
 }
 
 /* Animation for modal */
@@ -99,4 +119,20 @@
 
 .modal-animation-enter {
   animation: fadeIn 0.3s ease, slideIn 0.3s ease;
+}
+
+/* Custom theme classes */
+.theme-blue {
+  --primary: var(--blue-primary);
+  --accent: var(--blue-accent);
+}
+
+.theme-green {
+  --primary: var(--green-primary);
+  --accent: var(--green-accent);
+}
+
+.theme-purple {
+  --primary: var(--purple-primary);
+  --accent: var(--purple-accent);
 }

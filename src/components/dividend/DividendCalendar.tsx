@@ -30,15 +30,15 @@ const DividendEventDetails: React.FC<DividendEventDetailsProps> = ({
             Dividend Events for {format(date, "MMMM d, yyyy")}
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="h-[50vh] mt-4 pr-4">
-          <div className="space-y-4">
+        <ScrollArea className="h-[50vh] mt-2 pr-4">
+          <div className="space-y-3">
             {events.length === 0 ? (
               <p className="text-muted-foreground">No dividend events for this date.</p>
             ) : (
               events.map((event, index) => (
                 <div
                   key={`${event.ticker}-${index}`}
-                  className="p-4 rounded-md border bg-card"
+                  className="p-3 rounded-md border bg-card"
                 >
                   <div className="flex justify-between items-start">
                     <div className="font-bold text-lg">{event.ticker}</div>
@@ -51,49 +51,49 @@ const DividendEventDetails: React.FC<DividendEventDetailsProps> = ({
                   
                   <div className="grid grid-cols-2 gap-2 mt-2">
                     <div>
-                      <div className="text-sm text-muted-foreground">Ex-Dividend Date</div>
-                      <div>{format(new Date(event.exDate), "MMM d, yyyy")}</div>
+                      <div className="text-xs text-muted-foreground">Ex-Dividend Date</div>
+                      <div className="text-sm">{format(new Date(event.exDate), "MMM d, yyyy")}</div>
                     </div>
                     
                     {event.payDate && (
                       <div>
-                        <div className="text-sm text-muted-foreground">Payment Date</div>
-                        <div>{format(new Date(event.payDate), "MMM d, yyyy")}</div>
+                        <div className="text-xs text-muted-foreground">Payment Date</div>
+                        <div className="text-sm">{format(new Date(event.payDate), "MMM d, yyyy")}</div>
                       </div>
                     )}
                     
                     {event.amount !== undefined && (
                       <div>
-                        <div className="text-sm text-muted-foreground">Amount</div>
-                        <div>${event.amount.toFixed(4)}</div>
+                        <div className="text-xs text-muted-foreground">Amount</div>
+                        <div className="text-sm">${event.amount.toFixed(4)}</div>
                       </div>
                     )}
                     
                     {event.yield !== undefined && (
                       <div>
-                        <div className="text-sm text-muted-foreground">Dividend Yield</div>
-                        <div>{event.yield.toFixed(2)}%</div>
+                        <div className="text-xs text-muted-foreground">Dividend Yield</div>
+                        <div className="text-sm">{event.yield.toFixed(2)}%</div>
                       </div>
                     )}
                     
                     {event.yieldOnCost !== undefined && (
                       <div>
-                        <div className="text-sm text-muted-foreground">Yield on Cost</div>
-                        <div>{event.yieldOnCost.toFixed(2)}%</div>
+                        <div className="text-xs text-muted-foreground">Yield on Cost</div>
+                        <div className="text-sm">{event.yieldOnCost.toFixed(2)}%</div>
                       </div>
                     )}
                     
                     {event.price !== undefined && (
                       <div>
-                        <div className="text-sm text-muted-foreground">Price</div>
-                        <div>${event.price.toFixed(2)}</div>
+                        <div className="text-xs text-muted-foreground">Price</div>
+                        <div className="text-sm">${event.price.toFixed(2)}</div>
                       </div>
                     )}
                   </div>
                   
                   {event.notes && (
                     <div className="mt-2">
-                      <div className="text-sm text-muted-foreground">Notes</div>
+                      <div className="text-xs text-muted-foreground">Notes</div>
                       <div className="bg-muted/30 p-2 rounded text-sm">{event.notes}</div>
                     </div>
                   )}
@@ -103,8 +103,8 @@ const DividendEventDetails: React.FC<DividendEventDetailsProps> = ({
                       variant={event.received ? "outline" : "outline"}
                       className={
                         event.received
-                          ? "bg-green-100 text-green-800 hover:bg-green-200"
-                          : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+                          ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800/30"
+                          : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 hover:bg-yellow-200 dark:hover:bg-yellow-800/30"
                       }
                     >
                       {event.received ? "Received" : "Pending"}
@@ -200,19 +200,20 @@ const DividendCalendar: React.FC<DividendCalendarProps> = ({ dividendEvents }) =
 
   return (
     <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle>Dividend Calendar</CardTitle>
           <CardDescription>
             {format(currentMonth, "MMMM yyyy")}
           </CardDescription>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           <Button
             variant="outline"
             size="icon"
             onClick={prevMonth}
             aria-label="Previous month"
+            className="h-8 w-8"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -221,6 +222,7 @@ const DividendCalendar: React.FC<DividendCalendarProps> = ({ dividendEvents }) =
             size="icon"
             onClick={() => setCurrentMonth(new Date())}
             aria-label="Current month"
+            className="h-8 w-8"
           >
             <CalendarIcon className="h-4 w-4" />
           </Button>
@@ -229,22 +231,23 @@ const DividendCalendar: React.FC<DividendCalendarProps> = ({ dividendEvents }) =
             size="icon"
             onClick={nextMonth}
             aria-label="Next month"
+            className="h-8 w-8"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-7 gap-1 text-center font-medium">
+      <CardContent className="pb-2">
+        <div className="grid grid-cols-7 gap-0.5 text-center font-medium text-xs">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="py-2">
+            <div key={day} className="py-1">
               {day}
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1 mt-1">
+        <div className="grid grid-cols-7 gap-0.5 mt-1">
           {Array.from({ length: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay() }).map((_, i) => (
-            <div key={`empty-${i}`} className="h-24 p-1" />
+            <div key={`empty-${i}`} className="h-20 p-1" />
           ))}
           
           {daysInMonth.map((day) => {
@@ -256,37 +259,37 @@ const DividendCalendar: React.FC<DividendCalendarProps> = ({ dividendEvents }) =
             return (
               <div
                 key={dateKey}
-                className={`h-24 p-1 border rounded-md overflow-hidden transition-colors ${
+                className={`h-20 p-1 border rounded-md overflow-hidden transition-colors ${
                   isSelected
                     ? "border-primary bg-primary/5"
                     : hasEvents
-                    ? "border-gray-200 hover:border-primary/50 cursor-pointer"
-                    : "border-gray-100"
+                    ? "border-gray-200 dark:border-gray-700 hover:border-primary/50 cursor-pointer"
+                    : "border-gray-100 dark:border-gray-800"
                 }`}
                 onClick={() => handleDateClick(day)}
               >
                 <div className="flex justify-between items-start">
-                  <span className={`text-sm font-medium ${hasEvents ? "text-primary" : ""}`}>
+                  <span className={`text-xs font-medium ${hasEvents ? "text-primary" : ""}`}>
                     {getDate(day)}
                   </span>
                   {hasEvents && (
-                    <Badge className="text-xs">{dayEvents.length}</Badge>
+                    <Badge className="text-xs px-1 py-0">{dayEvents.length}</Badge>
                   )}
                 </div>
-                <div className="mt-1 space-y-1 overflow-hidden max-h-[calc(100%-22px)]">
+                <div className="mt-0.5 space-y-0.5 overflow-hidden max-h-[calc(100%-20px)]">
                   {dayEvents.slice(0, 2).map((event, idx) => (
                     <div
                       key={`${event.ticker}-${idx}`}
-                      className="text-xs p-1 bg-gray-50 rounded truncate"
+                      className="text-xs p-0.5 bg-gray-50 dark:bg-gray-800 rounded truncate"
                     >
                       <span className="font-medium">{event.ticker}</span>
-                      <span className="text-gray-500 ml-1">
+                      <span className="text-gray-500 dark:text-gray-400 ml-1 text-[10px]">
                         {event.notes?.includes("Ex-Dividend") ? "(Ex)" : "(Pay)"}
                       </span>
                     </div>
                   ))}
                   {dayEvents.length > 2 && (
-                    <div className="text-xs text-gray-500 italic">
+                    <div className="text-[10px] text-gray-500 dark:text-gray-400 italic">
                       +{dayEvents.length - 2} more
                     </div>
                   )}
