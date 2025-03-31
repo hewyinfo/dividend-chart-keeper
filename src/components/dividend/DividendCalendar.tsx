@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface DividendEventDetailsProps {
   date: Date;
@@ -23,95 +24,97 @@ const DividendEventDetails: React.FC<DividendEventDetailsProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[80vh]">
         <DialogHeader>
           <DialogTitle>
             Dividend Events for {format(date, "MMMM d, yyyy")}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 mt-4">
-          {events.length === 0 ? (
-            <p className="text-muted-foreground">No dividend events for this date.</p>
-          ) : (
-            events.map((event, index) => (
-              <div
-                key={`${event.ticker}-${index}`}
-                className="p-4 rounded-md border bg-card"
-              >
-                <div className="flex justify-between items-start">
-                  <div className="font-bold text-lg">{event.ticker}</div>
-                  <Badge
-                    variant={event.status === "Confirmed" ? "default" : "outline"}
-                  >
-                    {event.status}
-                  </Badge>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  <div>
-                    <div className="text-sm text-muted-foreground">Ex-Dividend Date</div>
-                    <div>{format(new Date(event.exDate), "MMM d, yyyy")}</div>
+        <ScrollArea className="h-[50vh] mt-4 pr-4">
+          <div className="space-y-4">
+            {events.length === 0 ? (
+              <p className="text-muted-foreground">No dividend events for this date.</p>
+            ) : (
+              events.map((event, index) => (
+                <div
+                  key={`${event.ticker}-${index}`}
+                  className="p-4 rounded-md border bg-card"
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="font-bold text-lg">{event.ticker}</div>
+                    <Badge
+                      variant={event.status === "Confirmed" ? "default" : "outline"}
+                    >
+                      {event.status}
+                    </Badge>
                   </div>
                   
-                  {event.payDate && (
+                  <div className="grid grid-cols-2 gap-2 mt-2">
                     <div>
-                      <div className="text-sm text-muted-foreground">Payment Date</div>
-                      <div>{format(new Date(event.payDate), "MMM d, yyyy")}</div>
+                      <div className="text-sm text-muted-foreground">Ex-Dividend Date</div>
+                      <div>{format(new Date(event.exDate), "MMM d, yyyy")}</div>
                     </div>
-                  )}
-                  
-                  {event.amount !== undefined && (
-                    <div>
-                      <div className="text-sm text-muted-foreground">Amount</div>
-                      <div>${event.amount.toFixed(4)}</div>
-                    </div>
-                  )}
-                  
-                  {event.yield !== undefined && (
-                    <div>
-                      <div className="text-sm text-muted-foreground">Dividend Yield</div>
-                      <div>{event.yield.toFixed(2)}%</div>
-                    </div>
-                  )}
-                  
-                  {event.yieldOnCost !== undefined && (
-                    <div>
-                      <div className="text-sm text-muted-foreground">Yield on Cost</div>
-                      <div>{event.yieldOnCost.toFixed(2)}%</div>
-                    </div>
-                  )}
-                  
-                  {event.price !== undefined && (
-                    <div>
-                      <div className="text-sm text-muted-foreground">Price</div>
-                      <div>${event.price.toFixed(2)}</div>
-                    </div>
-                  )}
-                </div>
-                
-                {event.notes && (
-                  <div className="mt-2">
-                    <div className="text-sm text-muted-foreground">Notes</div>
-                    <div className="bg-muted/30 p-2 rounded text-sm">{event.notes}</div>
+                    
+                    {event.payDate && (
+                      <div>
+                        <div className="text-sm text-muted-foreground">Payment Date</div>
+                        <div>{format(new Date(event.payDate), "MMM d, yyyy")}</div>
+                      </div>
+                    )}
+                    
+                    {event.amount !== undefined && (
+                      <div>
+                        <div className="text-sm text-muted-foreground">Amount</div>
+                        <div>${event.amount.toFixed(4)}</div>
+                      </div>
+                    )}
+                    
+                    {event.yield !== undefined && (
+                      <div>
+                        <div className="text-sm text-muted-foreground">Dividend Yield</div>
+                        <div>{event.yield.toFixed(2)}%</div>
+                      </div>
+                    )}
+                    
+                    {event.yieldOnCost !== undefined && (
+                      <div>
+                        <div className="text-sm text-muted-foreground">Yield on Cost</div>
+                        <div>{event.yieldOnCost.toFixed(2)}%</div>
+                      </div>
+                    )}
+                    
+                    {event.price !== undefined && (
+                      <div>
+                        <div className="text-sm text-muted-foreground">Price</div>
+                        <div>${event.price.toFixed(2)}</div>
+                      </div>
+                    )}
                   </div>
-                )}
-                
-                <div className="flex justify-end mt-2">
-                  <Badge
-                    variant={event.received ? "outline" : "outline"}
-                    className={
-                      event.received
-                        ? "bg-green-100 text-green-800 hover:bg-green-200"
-                        : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-                    }
-                  >
-                    {event.received ? "Received" : "Pending"}
-                  </Badge>
+                  
+                  {event.notes && (
+                    <div className="mt-2">
+                      <div className="text-sm text-muted-foreground">Notes</div>
+                      <div className="bg-muted/30 p-2 rounded text-sm">{event.notes}</div>
+                    </div>
+                  )}
+                  
+                  <div className="flex justify-end mt-2">
+                    <Badge
+                      variant={event.received ? "outline" : "outline"}
+                      className={
+                        event.received
+                          ? "bg-green-100 text-green-800 hover:bg-green-200"
+                          : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+                      }
+                    >
+                      {event.received ? "Received" : "Pending"}
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
-        </div>
+              ))
+            )}
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
