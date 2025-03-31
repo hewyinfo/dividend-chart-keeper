@@ -20,6 +20,7 @@ export type Database = {
           payment_date: string | null
           status: string
           ticker: string
+          user_id: string | null
           yoc: number | null
         }
         Insert: {
@@ -32,6 +33,7 @@ export type Database = {
           payment_date?: string | null
           status: string
           ticker: string
+          user_id?: string | null
           yoc?: number | null
         }
         Update: {
@@ -44,7 +46,29 @@ export type Database = {
           payment_date?: string | null
           status?: string
           ticker?: string
+          user_id?: string | null
           yoc?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          updated_at?: string
         }
         Relationships: []
       }

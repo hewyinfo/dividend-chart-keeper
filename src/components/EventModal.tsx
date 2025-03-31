@@ -12,6 +12,7 @@ import TickerSearchField from "./dividend/TickerSearchField";
 import DatePickerFields from "./dividend/DatePickerFields";
 import FinancialFields from "./dividend/FinancialFields";
 import StatusFields from "./dividend/StatusFields";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface EventModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ interface EventModalProps {
 
 const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const { user } = useAuth();
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
@@ -43,6 +45,7 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSubmit }) =>
       notes: data.notes,
       yieldOnCost: data.yieldOnCost,
       price: data.price,
+      user_id: user?.id, // Add user_id to the event
     });
     form.reset();
   };
