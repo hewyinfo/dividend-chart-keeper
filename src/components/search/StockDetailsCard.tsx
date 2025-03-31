@@ -1,16 +1,19 @@
 
 import React from "react";
 import { StockData } from "@/types/dividend";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CalendarIcon, DollarSign, TrendingUp, Shield } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon, DollarSign, TrendingUp, Shield, RefreshCw } from "lucide-react";
 import { formatDate, formatCurrency, formatPercent } from "@/lib/formatters";
 
 interface StockDetailsCardProps {
   stock: StockData;
+  onRefresh?: () => void;
+  onUseData?: () => void;
 }
 
-const StockDetailsCard: React.FC<StockDetailsCardProps> = ({ stock }) => {
+const StockDetailsCard: React.FC<StockDetailsCardProps> = ({ stock, onRefresh, onUseData }) => {
   const getSafetyScoreColor = () => {
     if (!stock.safetyScore) return "bg-gray-200 text-gray-800";
     
@@ -80,6 +83,22 @@ const StockDetailsCard: React.FC<StockDetailsCardProps> = ({ stock }) => {
           </div>
         </div>
       </CardContent>
+      
+      {(onRefresh || onUseData) && (
+        <CardFooter className="flex justify-end gap-2 pt-4">
+          {onRefresh && (
+            <Button variant="outline" size="sm" onClick={onRefresh}>
+              <RefreshCw className="mr-1 h-3 w-3" />
+              Refresh
+            </Button>
+          )}
+          {onUseData && (
+            <Button size="sm" onClick={onUseData}>
+              Use Data
+            </Button>
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 };
