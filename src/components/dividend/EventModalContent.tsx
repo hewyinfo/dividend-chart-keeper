@@ -15,23 +15,25 @@ interface EventModalContentProps {
   onClose: () => void;
   onSearchClick: () => void;
   onSubmit: (values: EventFormValues) => void;
+  isEditing?: boolean;
 }
 
 const EventModalContent: React.FC<EventModalContentProps> = ({
   form,
   onClose,
   onSearchClick,
-  onSubmit
+  onSubmit,
+  isEditing = false
 }) => {
   return (
     <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-auto modal-animation-enter">
       <DialogHeader>
-        <DialogTitle>Add Dividend Event</DialogTitle>
+        <DialogTitle>{isEditing ? "Edit Dividend Event" : "Add Dividend Event"}</DialogTitle>
       </DialogHeader>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <TickerSearchField form={form} onSearchClick={onSearchClick} />
+          <TickerSearchField form={form} onSearchClick={onSearchClick} disabled={isEditing && form.getValues().ticker === "CASH"} />
           <DatePickerFields form={form} />
           <FinancialFields form={form} />
           <StatusFields form={form} />
@@ -40,7 +42,7 @@ const EventModalContent: React.FC<EventModalContentProps> = ({
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Add Event</Button>
+            <Button type="submit">{isEditing ? "Update" : "Add"} Event</Button>
           </DialogFooter>
         </form>
       </Form>

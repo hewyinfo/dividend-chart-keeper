@@ -10,13 +10,14 @@ interface EventModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: DividendEvent) => void;
+  initialEvent?: DividendEvent;
 }
 
-const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSubmit, initialEvent }) => {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   return (
-    <EventModalForm onSubmit={onSubmit}>
+    <EventModalForm onSubmit={onSubmit} initialEvent={initialEvent}>
       {({ form, handleSelectStock, handleSubmit }) => (
         <>
           <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -25,6 +26,7 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSubmit }) =>
               onClose={onClose}
               onSearchClick={() => setIsSearchModalOpen(true)}
               onSubmit={handleSubmit}
+              isEditing={!!initialEvent}
             />
           </Dialog>
 
