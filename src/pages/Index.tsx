@@ -1,20 +1,16 @@
 
 import React, { useState } from "react";
-import { Plus, Download, Search, CircleDollarSign, List, BarChart, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { useDividendData } from "@/hooks/use-dividend-data";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DividendChart from "@/components/dividend/DividendChart";
-import DividendCalendar from "@/components/dividend/DividendCalendar";
-import DividendListView from "@/components/dividend/DividendListView";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import EventModal from "@/components/EventModal";
-import { DividendEvent } from "@/types/dividend";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import AddCashModal from "@/components/dividend/AddCashModal";
+import DividendHeader from "@/components/dividend/DividendHeader";
+import FilterBar from "@/components/dividend/FilterBar";
+import ViewContainer from "@/components/dividend/ViewContainer";
+import { DividendEvent } from "@/types/dividend";
 
 const DividendDashboard = () => {
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
@@ -105,59 +101,15 @@ const DividendDashboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <header className="mb-8 flex flex-col items-center">
-        <div className="absolute top-4 right-4">
-          <ThemeToggle />
-        </div>
-        <h1 className="text-3xl font-bold mb-2 text-center">Dividend Tracker</h1>
-        <p className="text-muted-foreground text-center">
-          Track and visualize your dividend investments
-        </p>
-      </header>
+      <DividendHeader />
 
-      <div className="mb-6 flex flex-col sm:flex-row justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by ticker or notes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-2 self-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExportCsv}
-            className="gap-2"
-          >
-            <Download className="h-4 w-4" />
-            <span className="hidden sm:inline">Export CSV</span>
-          </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsCashModalOpen(true)}
-            className="gap-2"
-          >
-            <CircleDollarSign className="h-4 w-4" />
-            <span>Add Cash</span>
-          </Button>
-          
-          <Button
-            onClick={() => setIsEventModalOpen(true)}
-            className="gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            <span>Add Dividend</span>
-          </Button>
-        </div>
-      </div>
+      <FilterBar 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onExportCsv={handleExportCsv}
+        onAddCash={() => setIsCashModalOpen(true)}
+        onAddDividend={() => setIsEventModalOpen(true)}
+      />
 
       {isLoading ? (
         <div className="space-y-4">
@@ -178,47 +130,13 @@ const DividendDashboard = () => {
           </CardContent>
         </Card>
       ) : (
-        <Tabs value={activeView} onValueChange={setActiveView} className="space-y-4">
-          <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-4">
-            <TabsTrigger value="chart" className="flex items-center gap-2">
-              <BarChart className="h-4 w-4" />
-              <span>Chart</span>
-            </TabsTrigger>
-            <TabsTrigger value="calendar" className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>Calendar</span>
-            </TabsTrigger>
-            <TabsTrigger value="list" className="flex items-center gap-2">
-              <List className="h-4 w-4" />
-              <span>List</span>
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="chart" className="space-y-8">
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Performance Chart</h2>
-              <DividendChart dividendEvents={filteredEvents} />
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="calendar" className="space-y-8">
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Dividend Calendar</h2>
-              <DividendCalendar dividendEvents={filteredEvents} />
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="list" className="space-y-8">
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Dividend List</h2>
-              <DividendListView 
-                dividendEvents={filteredEvents} 
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
+        <ViewContainer 
+          dividendEvents={filteredEvents}
+          searchQuery={searchQuery}
+          activeView={activeView}
+          onActiveViewChange={setActiveView}
+          onSearchChange={setSearchQuery}
+        />
       )}
 
       <EventModal 
