@@ -1,4 +1,3 @@
-
 export interface DividendEvent {
   id?: string;
   ticker: string;
@@ -14,6 +13,7 @@ export interface DividendEvent {
   created_at?: string;
   safetyScore?: number;
   safetyRating?: 'Low' | 'Medium' | 'High';
+  user_id?: string;
 }
 
 export interface ChartDataPoint {

@@ -45,7 +45,7 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onSubmit }) =>
       notes: data.notes,
       yieldOnCost: data.yieldOnCost,
       price: data.price,
-      user_id: user?.id, // Add user_id to the event
+      user_id: user?.id, // This is now valid because we added it to the interface
     });
     form.reset();
   };

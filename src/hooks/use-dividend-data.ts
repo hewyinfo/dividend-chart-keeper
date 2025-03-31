@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { DividendEvent, DividendFilters } from '@/types/dividend';
 import { useToast } from '@/hooks/use-toast';
@@ -57,10 +56,10 @@ export function useDividendData() {
           yield: item.dividend_yield,
           received: item.status === 'Confirmed',
           amount: item.amount,
-          status: item.status === 'Confirmed' ? 'Confirmed' : 'Projected',
+          status: item.status as 'Confirmed' | 'Projected',
           notes: item.notes,
           yieldOnCost: item.yoc,
-          price: item.price,
+          price: item.amount,
           created_at: item.created_at,
         }));
         
@@ -98,7 +97,6 @@ export function useDividendData() {
             status: event.status,
             notes: event.notes,
             yoc: event.yieldOnCost,
-            price: event.price,
             user_id: user.id
           })
           .select()
@@ -114,10 +112,10 @@ export function useDividendData() {
           yield: data.dividend_yield,
           received: data.status === 'Confirmed',
           amount: data.amount,
-          status: data.status,
+          status: data.status as 'Confirmed' | 'Projected',
           notes: data.notes,
           yieldOnCost: data.yoc,
-          price: data.price,
+          price: data.amount,
           created_at: data.created_at,
         };
         
@@ -165,7 +163,6 @@ export function useDividendData() {
             amount: amount,
             status: "Confirmed",
             notes: notes,
-            price: amount,
             user_id: user.id
           })
           .select()
@@ -179,9 +176,9 @@ export function useDividendData() {
           exDate: data.ex_div_date,
           received: true,
           amount: data.amount,
-          status: "Confirmed",
+          status: data.status as 'Confirmed' | 'Projected',
           notes: data.notes,
-          price: data.price,
+          price: data.amount,
           created_at: data.created_at,
         };
         
@@ -234,7 +231,6 @@ export function useDividendData() {
             status: event.status,
             notes: event.notes,
             yoc: event.yieldOnCost,
-            price: event.price,
           })
           .eq('id', event.id)
           .eq('user_id', user.id)
@@ -251,10 +247,10 @@ export function useDividendData() {
           yield: data.dividend_yield,
           received: data.status === 'Confirmed',
           amount: data.amount,
-          status: data.status,
+          status: data.status as 'Confirmed' | 'Projected',
           notes: data.notes,
           yieldOnCost: data.yoc,
-          price: data.price,
+          price: data.amount,
           created_at: data.created_at,
         };
         
