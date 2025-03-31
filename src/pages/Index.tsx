@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import EventModal from "@/components/EventModal";
 import AddCashModal from "@/components/dividend/AddCashModal";
+import ApiSettingsModal from "@/components/settings/ApiSettingsModal";
 import DividendHeader from "@/components/dividend/DividendHeader";
 import FilterBar from "@/components/dividend/FilterBar";
 import ViewContainer from "@/components/dividend/ViewContainer";
@@ -15,8 +16,10 @@ import { DividendEvent } from "@/types/dividend";
 const DividendDashboard = () => {
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isCashModalOpen, setIsCashModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeView, setActiveView] = useState("chart");
+  const [minSafetyScore, setMinSafetyScore] = useState(0);
   const { toast } = useToast();
   
   const {
@@ -49,14 +52,25 @@ const DividendDashboard = () => {
   };
 
   const filteredEvents = React.useMemo(() => {
-    if (!searchQuery.trim()) return dividendEvents;
+    if (!dividendEvents) return [];
     
-    const query = searchQuery.toLowerCase().trim();
-    return dividendEvents.filter(event => 
-      event.ticker.toLowerCase().includes(query) || 
-      (event.notes && event.notes.toLowerCase().includes(query))
-    );
-  }, [dividendEvents, searchQuery]);
+    return dividendEvents.filter(event => {
+      // Filter by search query
+      const matchesSearch = !searchQuery.trim() || 
+        event.ticker.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        (event.notes && event.notes.toLowerCase().includes(searchQuery.toLowerCase()));
+      
+      // Filter by safety score
+      const matchesSafetyScore = minSafetyScore === 0 || 
+        (event.safetyScore !== undefined && event.safetyScore >= minSafetyScore);
+      
+      return matchesSearch && matchesSafetyScore;
+    });
+  }, [dividendEvents, searchQuery, minSafetyScore]);
+
+  const handleFilterBySafetyScore = (score: number) => {
+    setMinSafetyScore(score);
+  };
 
   const handleExportCsv = async () => {
     try {
@@ -101,7 +115,7 @@ const DividendDashboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <DividendHeader />
+      <DividendHeader onOpenSettings={() => setIsSettingsModalOpen(true)} />
 
       <FilterBar 
         searchQuery={searchQuery}
@@ -109,6 +123,8 @@ const DividendDashboard = () => {
         onExportCsv={handleExportCsv}
         onAddCash={() => setIsCashModalOpen(true)}
         onAddDividend={() => setIsEventModalOpen(true)}
+        onFilterBySafetyScore={handleFilterBySafetyScore}
+        showSafetyScoreFilter={true}
       />
 
       {isLoading ? (
@@ -149,6 +165,11 @@ const DividendDashboard = () => {
         isOpen={isCashModalOpen}
         onClose={() => setIsCashModalOpen(false)}
         onSubmit={handleAddCash}
+      />
+      
+      <ApiSettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
       />
     </div>
   );

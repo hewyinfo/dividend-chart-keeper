@@ -1,8 +1,15 @@
 
 import React from "react";
-import { Download, CircleDollarSign, Plus, Search } from "lucide-react";
+import { Download, CircleDollarSign, Plus, Search, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
 interface FilterBarProps {
   searchQuery: string;
@@ -10,6 +17,8 @@ interface FilterBarProps {
   onExportCsv: () => void;
   onAddCash: () => void;
   onAddDividend: () => void;
+  onFilterBySafetyScore?: (minScore: number) => void;
+  showSafetyScoreFilter?: boolean;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
@@ -18,6 +27,8 @@ const FilterBar: React.FC<FilterBarProps> = ({
   onExportCsv,
   onAddCash,
   onAddDividend,
+  onFilterBySafetyScore,
+  showSafetyScoreFilter = false,
 }) => {
   return (
     <div className="mb-6 flex flex-col sm:flex-row justify-between gap-4">
@@ -31,6 +42,33 @@ const FilterBar: React.FC<FilterBarProps> = ({
             className="pl-9"
           />
         </div>
+        
+        {showSafetyScoreFilter && onFilterBySafetyScore && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Shield className="h-4 w-4" />
+                <span>Safety Score</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => onFilterBySafetyScore(0)}>
+                  All Scores
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onFilterBySafetyScore(75)}>
+                  High (75+)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onFilterBySafetyScore(50)}>
+                  Medium (50+)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onFilterBySafetyScore(25)}>
+                  Low (25+)
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
       
       <div className="flex items-center gap-2 self-end">

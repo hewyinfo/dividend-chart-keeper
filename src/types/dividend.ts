@@ -12,6 +12,8 @@ export interface DividendEvent {
   yieldOnCost?: number;
   price?: number;
   created_at?: string;
+  safetyScore?: number;
+  safetyRating?: 'Low' | 'Medium' | 'High';
 }
 
 export interface ChartDataPoint {
@@ -30,6 +32,12 @@ export interface SecuritySearchResult {
   exchange?: string;
 }
 
+export interface DividendSafetyScore {
+  score: number;
+  payoutRatio: number | null;
+  rating: 'Low' | 'Medium' | 'High';
+}
+
 export interface StockData {
   ticker: string;
   name: string;
@@ -38,6 +46,7 @@ export interface StockData {
   latestDividend: number;
   exDivDate: string;
   paymentDate: string;
+  safetyScore?: DividendSafetyScore;
 }
 
 export interface DividendFilters {
@@ -46,4 +55,5 @@ export interface DividendFilters {
   showProjectedDividends: boolean;
   ticker?: string;
   timeScale: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
+  minSafetyScore?: number;
 }

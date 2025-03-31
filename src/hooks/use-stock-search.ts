@@ -2,12 +2,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { SecuritySearchResult, StockData } from "@/types/dividend";
-import { searchSecurities, getStockData } from "@/services/intrinioService";
+import { searchSecurities, getStockData, getHistoricalDividends } from "@/services/intrinioService";
 
 export function useStockSearch() {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SecuritySearchResult[]>([]);
   const [selectedStock, setSelectedStock] = useState<StockData | null>(null);
+  const [historicalDividends, setHistoricalDividends] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const searchTimeoutRef = useRef<NodeJS.Timeout>();
@@ -54,10 +55,14 @@ export function useStockSearch() {
     try {
       setIsLoading(true);
       setSearchResults([]);
-      const data = await getStockData(ticker);
+      const [data, history] = await Promise.all([
+        getStockData(ticker),
+        getHistoricalDividends(ticker)
+      ]);
       
       if (data) {
         setSelectedStock(data);
+        setHistoricalDividends(history);
       } else {
         toast({
           title: "Data Not Found",
@@ -84,6 +89,7 @@ export function useStockSearch() {
     query,
     searchResults,
     selectedStock,
+    historicalDividends,
     isLoading,
     handleSearch,
     handleQueryChange,
