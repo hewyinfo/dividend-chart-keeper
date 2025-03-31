@@ -1,10 +1,9 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -34,6 +33,22 @@ const Auth = () => {
     },
   });
 
+  const [bypassEnabled, setBypassEnabled] = useState(() => {
+    return localStorage.getItem("bypassAuth") === "true";
+  });
+
+  const enableBypassAuth = () => {
+    localStorage.setItem("bypassAuth", "true");
+    setBypassEnabled(true);
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (bypassEnabled) {
+      navigate("/");
+    }
+  }, [bypassEnabled, navigate]);
+
   const onSubmit = async (data: AuthFormValues) => {
     setIsLoading(true);
     try {
@@ -42,14 +57,12 @@ const Auth = () => {
         navigate("/");
       } else {
         await signUp(data.email, data.password);
-        // Don't navigate - user needs to verify email first
         toast({
           title: "Success",
           description: "Please check your email to verify your account",
         });
       }
     } catch (error) {
-      // Error is handled in the auth context
     } finally {
       setIsLoading(false);
     }
@@ -108,6 +121,23 @@ const Auth = () => {
             </Form>
           </Tabs>
         </CardContent>
+        <CardFooter className="flex flex-col">
+          <div className="relative w-full my-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">For Development</span>
+            </div>
+          </div>
+          <Button 
+            variant="outline" 
+            className="w-full" 
+            onClick={enableBypassAuth}
+          >
+            Bypass Authentication (Test Mode)
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );
